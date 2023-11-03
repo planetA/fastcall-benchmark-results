@@ -13,3 +13,6 @@
 [submodule "benchmark"]
 	path = benchmark
 	url = https://github.com/google/benchmark
+[submodule "linux-ycall"]
+	path = linux-ycall
+	url = https://github.com/planetA/linux.git
