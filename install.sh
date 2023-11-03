@@ -65,6 +65,16 @@ install_kernel() {
         's/CONFIG_ARM64_SW_TTBR0_PAN=y/# CONFIG_ARM64_SW_TTBR0_PAN is not set/g' \
         .config
     fi
+    if [[ "$1" == ycall ]]; then
+      # CONFIG_FASTCALL must be set
+      sed -i \
+        's/# CONFIG_FASTCALL is not set/CONFIG_FASTCALL=y/g' \
+        .config
+      # CONFIG_FASTCALL_DRIVER must be set
+      sed -i \
+        's/# CONFIG_FASTCALL_DRIVER is not set/CONFIG_FASTCALL_DRIVER=y/g' \
+        .config
+    fi
     make olddefconfig
     make localmodconfig
     # CONFIG_X86_MSR should be set for CPU power management.
@@ -124,6 +134,8 @@ git submodule update --init --recursive --depth=1
 install_kernel fastcall
 
 install_kernel fccmp
+
+install_kernel ycall
 
 #
 # Build Google's benchmark library
