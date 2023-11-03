@@ -1,0 +1,12 @@
+name,iterations,real_time,cpu_time,time_unit,bytes_per_second,items_per_second,label,error_occurred,error_message
+"IOCTLFixture/ioctl_noop",8848315,79.5926,79.589,ns,,,,,
+"IOCTLFixture/ioctl_array/0",5554408,126.203,126.195,ns,0,,,,
+"IOCTLFixture/ioctl_array/8",4896141,143.018,143.012,ns,5.59393e+07,,,,
+"IOCTLFixture/ioctl_array/16",4867932,143.838,143.833,ns,1.1124e+08,,,,
+"IOCTLFixture/ioctl_array/24",4846804,144.186,144.18,ns,1.66459e+08,,,,
+"IOCTLFixture/ioctl_array/32",4859383,144.607,144.602,ns,2.21296e+08,,,,
+"IOCTLFixture/ioctl_array/40",4838240,144.57,144.564,ns,2.76695e+08,,,,
+"IOCTLFixture/ioctl_array/48",4822906,145.601,145.597,ns,3.29678e+08,,,,
+"IOCTLFixture/ioctl_array/56",4796023,145.871,145.865,ns,3.83917e+08,,,,
+"IOCTLFixture/ioctl_array/64",4813599,145.706,145.702,ns,4.39253e+08,,,,
+"IOCTLFixture/ioctl_nt",1984479,352.669,352.65,ns,1.81483e+08,,,,

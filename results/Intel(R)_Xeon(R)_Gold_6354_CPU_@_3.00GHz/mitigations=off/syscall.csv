@@ -1,0 +1,12 @@
+name,iterations,real_time,cpu_time,time_unit,bytes_per_second,items_per_second,label,error_occurred,error_message
+"syscall_sys_ni_syscall",10416724,67.4842,67.48,ns,,,,,
+"syscall_array/0",8160932,86.0842,86.0802,ns,0,,,,
+"syscall_array/8",6926859,100.876,100.869,ns,7.9311e+07,,,,
+"syscall_array/16",6900272,101.596,101.591,ns,1.57495e+08,,,,
+"syscall_array/24",6841248,102.245,102.239,ns,2.34743e+08,,,,
+"syscall_array/32",6832957,102.219,102.214,ns,3.13068e+08,,,,
+"syscall_array/40",6816277,102.533,102.529,ns,3.90133e+08,,,,
+"syscall_array/48",6774766,103.114,103.109,ns,4.65525e+08,,,,
+"syscall_array/56",6753588,103.389,103.384,ns,5.4167e+08,,,,
+"syscall_array/64",6783942,102.874,102.867,ns,6.22162e+08,,,,
+"syscall_nt",2205857,317.504,317.489,ns,2.01582e+08,,,,
