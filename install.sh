@@ -36,6 +36,11 @@ install_kernel() {
       OUTPUT="$(echo "$OUTPUT" | sort | tail --lines=1)"
       echo "Using $OUTPUT as .config"
       cp "$OUTPUT" .config
+    elif OUTPUT="$(ls /boot/config-*-oracle 2>/dev/null)"; then
+      # This finds the latest kernel config at least on AWS.
+      OUTPUT="$(echo "$OUTPUT" | sort | tail --lines=1)"
+      echo "Using $OUTPUT as .config"
+      cp "$OUTPUT" .config
     else
       echo "Using defconfig"
       make defconfig
@@ -71,6 +76,38 @@ install_kernel() {
   sudo make install
 }
 
+sudo apt update
+sudo apt dist-upgrade
+sudo apt install \
+	linux-tools-common \
+	cmake \
+	build-essential \
+	libncurses-dev \
+	gawk \
+	flex \
+	dwarves \
+	zstd \
+	bison \
+	openssl \
+	libssl-dev \
+	dkms \
+	libelf-dev \
+	libudev-dev \
+	libpci-dev \
+	libiberty-dev \
+	autoconf \
+	gettext \
+	libcap-dev \
+	binutils-dev \
+	libreadline-dev \
+	libconfig-dev \
+	libunwind-dev \
+	libdwarf-dev \
+	libdw-dev \
+	bpfcc-tools \
+	libgtest-dev \
+	libboost-all-dev
+
 #
 # Init repo if not done yet
 #
@@ -88,8 +125,6 @@ install_kernel fastcall
 
 install_kernel fccmp
 
-install_kernel syscall-bench
-
 #
 # Build Google's benchmark library
 #
@@ -99,7 +134,7 @@ echo
 
 cd $SPATH/benchmark
 mkdir -p $SPATH/benchmark/build
-cmake -DCMAKE_BUILD_TYPE=Release -DBENCHMARK_DOWNLOAD_DEPENDENCIES=on \
+cmake -DCMAKE_BUILD_TYPE=Release -DBENCHMARK_DOWNLOAD_DEPENDENCIES=off -DGOOGLETEST_PATH=/usr/src/googletest \
       -S . -B "build"
 cmake --build "build" --config Release -j `nproc`
 sudo cmake --build "build" --config Release --target install
