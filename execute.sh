@@ -34,6 +34,7 @@ KOPTS=""
 # list of microbenchmarks to run
 BENCHS_fastcall="fastcall"
 BENCHS_fccmp="syscall ioctl vdso"
+BENCHS_ycall="ycall"
 
 ################################################################################
 #                                                                              #
@@ -266,6 +267,13 @@ disable_cpu_scaling () {
 }
 
 #
+# Make sure that fastcall driver is accessible. It is root only for ycalls by default
+#
+permit_driver() {
+  sudo chmod o+rwx /dev/fastcall-examples
+}
+
+#
 # Runs microbenchmark experiments. Multiple reboots and kernel switches may be
 # required in between!
 #
@@ -276,18 +284,21 @@ do_run_micro () {
   # system default after next reboot)
   disable_cpu_scaling
 
+  permit_driver
+
   for miti in $MITIS
     do
     # create results directory
     mkdir -p ${SPATH}/results/${CPUID}/${miti}
 
-    for ktype in "fastcall" "fccmp"
+    for ktype in "fastcall" "fccmp" "ycall"
       do
+      echo $ktype
 
       benchs="BENCHS_$ktype"
       for bench in ${!benchs}
         do
-        echo "Running benchmark $bench for kernel config ${miti}..."
+        echo "Running micro benchmark $bench for kernel ${ktype} config ${miti}..."
 
         # check if benchmark was already conducted
         if [ -f ${SPATH}/results/${CPUID}/${miti}/${bench}.csv ]
@@ -352,13 +363,15 @@ do_run_cycle () {
   # system default after next reboot)
   disable_cpu_scaling
 
+  permit_driver
+
   for miti in $MITIS
     do
     # create results directory
     mkdir -p ${SPATH}/results/${CPUID}/${miti}
 
     # do misc benchmarks for both the fastcall and the fccmp kernel
-    for ktype in "fastcall" "fccmp"
+    for ktype in "fastcall" "fccmp" "ycall"
       do
       echo "Running cycle benchmarks for kernel config ${ktype}/${miti}..."
 
@@ -439,13 +452,15 @@ do_run_misc () {
   # system default after next reboot)
   disable_cpu_scaling
 
+  permit_driver
+
   for miti in $MITIS
     do
     # create results directory
     mkdir -p ${SPATH}/results/${CPUID}/${miti}
 
     # do misc benchmarks for both the fastcall and the fccmp kernel
-    for ktype in "fastcall" "fccmp"
+    for ktype in "fastcall" "fccmp" "ycall"
       do
       echo "Running misc benchmarks for kernel config ${ktype}/${miti}..."
 
@@ -527,6 +542,8 @@ do_run_syscall () {
   # set CPU governor to performance for this boot cycle (will be reset to
   # system default after next reboot)
   disable_cpu_scaling
+
+  permit_driver
 
   for miti in $MITIS
     do
