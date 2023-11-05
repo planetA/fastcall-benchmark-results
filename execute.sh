@@ -154,6 +154,20 @@ check_kernel () {
       echo "./load_kernel.sh set --version $nkernv --delopts "$KOPTS" --setopts $opts"
       exit 2
     fi
+  elif [ "$2" == "ycall" ]
+    then
+    # name of kernel that should be booted
+    nkernv=`ls /boot | grep vmlinuz-.* | grep -v old | grep ycall`
+    nkernv=${nkernv##vmlinuz-}
+
+    if [[ ! $kversion == *"ycall"* ]]
+      then
+      echo "ERROR: Wrong kernel version!"
+      echo "Run the following command, reboot and continue execution: "
+      echo
+      echo "./load_kernel.sh set --version $nkernv --delopts "$KOPTS" --setopts $opts"
+      exit 2
+    fi
   elif [ "$2" == "fccmp" ]
   then
     # name of kernel that should be booted
@@ -386,6 +400,9 @@ do_run_cycle () {
       if [ "$ktype" == "fastcall" ]
         then
         cycle_benchs="noop fastcall"
+      elif [ "$ktype" == "ycall" ]
+        then
+        cycle_benchs="noop ycall"
       else
         # leave some benchmarks out as they can only be performed with a
         # fastcall-enabled kernel.
@@ -479,6 +496,13 @@ do_run_misc () {
                      deregistration-minimal deregistration-mappings
                      fork-simple fork-fastcall
                      vfork-simple vfork-fastcall"
+      elif [ "$ktype" == "ycall" ]
+        then
+        misc_benchs="noop
+                     ycall-registration-minimal 
+                     ycall-deregistration-minimal
+                     fork-simple fork-ycall
+                     vfork-simple vfork-ycall"
       else
         # leave some benchmarks out as they can only be performed with a
         # fastcall-enabled kernel.
