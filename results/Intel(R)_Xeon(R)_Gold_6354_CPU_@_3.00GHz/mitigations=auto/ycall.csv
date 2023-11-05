@@ -1,0 +1,2 @@
+name,iterations,real_time,cpu_time,time_unit,bytes_per_second,items_per_second,label,error_occurred,error_message
+"YceExamplesFixture<yce::IOCTL_NOOP>/ycall_examples_noop",161076128,4.34588,4.34577,ns,,,,,
