@@ -419,30 +419,49 @@ df.reg <- df %>%
         cpu == "Intel(R)_Xeon(R)_Gold_6354_CPU_@_3.00GHz"
     )
 p <- df.reg %>%
+    ungroup() %>%
     mutate(
-        mechanism = str_to_title(
+        measurement = str_to_title(
             str_replace(
-                str_replace(mechanism, "ycall-", ""), "-minimal", ""
+                str_replace(measurement, "ycall-", ""), "-minimal", ""
             )
         ),
-    )
-left_join(df.cpu.freq, by = "cpu") %>%
-    arrange(cycles) %>%
+    ) %>%
+    mutate(
+        mechanism = fct_recode(mechanism,
+            "Unprivileged" = "ycall",
+            "Privileged" = "fastcall",
+        ),
+    ) %>%
+    left_join(df.cpu.freq, by = "cpu") %>%
+    arrange(time) %>%
     ggplot(aes(
-        x = fct_reorder(short_cpu, cycles),
-        y = cycles, fill = vulnerable
+        x = fct_reorder(measurement, time),
+        y = time / 1000, fill = mechanism
     )) +
     geom_bar(stat = "identity", position = "dodge") +
+    geom_errorbar(
+        aes(ymin = (time - time.sd) / 1000, ymax = (time + time.sd) / 1000),
+        position = position_dodge(width = 0.9), width = 0.2
+    ) +
     scale_fill_brewer(
         type = "qual",
         palette = "Dark2", name = "Mitigations", direction = -1
     ) +
-    ylab("Cycles") +
-    xlab("CPU") +
+    ylab("Time (us)") +
+    xlab("Operation") +
     theme_pubr(base_size = 8) %+replace%
     theme(
         strip.background = element_blank(),
         strip.placement = "outside", legend.position = "none"
     ) +
-    facet_wrap(~vulnerable, scales = "free_x")
+    facet_wrap(~mechanism, scales = "free_x")
 plot(p)
+
+# Save the plot as tikz
+tikz(
+    file.path("plots", cur.cpu, "misc", "reg-dereg.tex"),
+    width = 2.3, height = 2.5
+)
+plot(p)
+dev.off()
