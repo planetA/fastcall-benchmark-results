@@ -414,6 +414,7 @@ df <- df.all %>%
     summarise(
         time.sd = sd(time),
         time = median(time),
+        n = n(),
     )
 
 df.reg <- df %>%
@@ -565,7 +566,7 @@ plot(p)
 # Save the plot as tikz
 tikz(
     file.path("plots", cur.cpu, "fork.tex"),
-    width = 1.8, height = 2.5
+    width = 1.8, height = 2
 )
 plot(p)
 dev.off()
